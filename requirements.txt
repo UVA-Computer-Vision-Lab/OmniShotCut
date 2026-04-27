@@ -1,0 +1,17 @@
+pandas
+tqdm
+opencv-python
+numpy       # 1.26.0 for PyIQA & others; but need >2.0 for np.load pickle
+ffmpeg-python
+scikit-learn
+matplotlib
+imageio
+imageio-ffmpeg
+tensorboard
+omegaconf
+huggingface_hub
+transformers==4.57.3
+accelerate
+# scenedetect[opencv-headless]
+gradio
+

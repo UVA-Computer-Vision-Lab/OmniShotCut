@@ -1,0 +1,33 @@
+*.csv
+*.mp4
+*.png
+*.jpg
+*.err
+*.txt
+*.log
+*.pyc
+*.pth
+*.DS_Store*
+*.o
+*.so
+*.egg*
+*.json
+*.zip
+*.jpeg
+*.pkl
+*.gif
+*.pem
+*.npy
+*.tar
+
+
+# Leave the folder of some
+data_embedding/*
+cut_anything_dataset/*
+runs/*
+gradio_tmp/*
+
+# Don't Ignore something
+!requirements.txt
+!__assets__/*
+
