@@ -16,7 +16,7 @@ OmniShotCut can detect shot changes of the video in diverse sources (anime, vlog
 
 
 
-🔥 [Update](#Update) **|** 👀 [**Visualization**](#Visualization)  **|** 🔧 [Installation](#Installation) **|** ⚡ [Test](#fast_inference)  **|** 💻 [OmniShotCut Benchmark](#evaluation)
+🔥 [Update](#Update) **|** 👀 [**Visualization**](#Visualization)  **|** 🔧 [Installation](#Installation) **|** ⚡ [Inference](#fast_inference)  **|** 💻 [OmniShotCut Benchmark](#evaluation)
 
 
 
