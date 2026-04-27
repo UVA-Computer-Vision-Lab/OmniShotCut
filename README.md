@@ -76,7 +76,7 @@ However, we believe that most users might want the most direct results, which is
 
 Execute the inference by:
 ```shell
-python test_code/inference.py  --checkpoint_path XXX  --input_video_path XXX  --mode default
+python test_code/inference.py  --checkpoint_path XXX  --input_video_path XXX  --mode clean_shot
 ```
 We will visualize the results by creating a folder named 'demo_video_results', where vertical bar with the same color refer to the same shot.
 
