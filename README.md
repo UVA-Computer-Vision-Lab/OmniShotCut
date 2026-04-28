@@ -13,7 +13,7 @@ OmniShotCut can detect shot changes of the video in diverse sources (anime, vlog
 [![Paper](https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2604.24762)
 [![Website](https://img.shields.io/badge/Project-Website-pink?logo=googlechrome&logoColor=white)](https://uva-computer-vision-lab.github.io/OmniShotCut_website/)
 <a href="https://huggingface.co/spaces/uva-cv-lab/OmniShotCut"><img src="https://img.shields.io/static/v1?label=%F0%9F%A4%97%20HF%20Space&message=Online+Demo&color=orange"></a>
-
+<a href="https://huggingface.co/uva-cv-lab/OmniShotCut"><img src="https://img.shields.io/static/v1?label=%F0%9F%A4%97%20HuggingFace&message=Model+Weight&color=orange"></a>
 
 
 🔥 [Update](#Update) **|** 👀 [**Visualization**](#Visualization)  **|** 🔧 [Installation](#Installation) **|** ⚡ [Inference](#fast_inference)  **|** 💻 [OmniShotCut Benchmark](#evaluation)
