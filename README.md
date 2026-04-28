@@ -6,7 +6,7 @@
 
 ## OmniShotCut: Holistic Relational Shot Boundary Detection with Shot-Query Transformer
 
-OmniShotCut is a sensitive and more informative SoTA on the Shot Boundary Detection task. \
+OmniShotCut is a sensitive and more informative SoTA on the Shot Boundary Detection. \
 OmniShotCut can detect shot changes of the video in diverse sources (anime, vlog, game, shorts, sports, screen recording, etc.), and recognize Sudden Jump and Transitions (dissolve, fade, wipe, etc.) by proposing a Shot-Query-based Video Transformer.
 
 
