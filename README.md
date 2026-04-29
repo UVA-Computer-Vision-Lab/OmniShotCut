@@ -27,6 +27,10 @@ OmniShotCut can detect shot changes of the video in diverse sources (anime, vlog
 - [x] Release Gradio demo (with online)
 - [ ] Release the benchmark
 - [ ] Release the training code and curation
+      
+:star: **If you like OmniShotCut, please help ⭐⭐star⭐⭐ this repo. Thanks!** :hugs:
+
+
 
 
 <p align="center">
