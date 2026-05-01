@@ -89,7 +89,12 @@ We will visualize the results by creating a folder named 'demo_video_results', w
 
 ## 📚 Citation
 ```bibtex
-
+@article{wang2026omnishotcut,
+  title={OmniShotCut: Holistic Relational Shot Boundary Detection with Shot-Query Transformer},
+  author={Wang, Boyang and Xu, Guangyi and Tang, Zhipeng and Zhang, Jiahui and Cheng, Zezhou},
+  journal={arXiv preprint arXiv:2604.24762},
+  year={2026}
+}
 ```
 
 
