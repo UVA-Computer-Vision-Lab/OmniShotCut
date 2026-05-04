@@ -76,11 +76,12 @@ Click "Running on **public** URL".
 
 ## <a name="inference"></a> Inference ⚡
 We provide some modes for the inference. 'default' mode will shot the intra and inter label we define.
-However, we believe that most users might want the most direct results, which is valid shots without any transitions and sudden jump. To this end, please use '--mode clean_shot'.
+However, we believe that most users might want the most direct results, which is the general shots without any transitions. 
+To this end, please use '--mode clean_shot'.
 
 Execute the inference by:
 ```shell
-python test_code/inference.py  --checkpoint_path XXX  --input_video_path XXX  --mode clean_shot
+python test_code/inference.py  --checkpoint_path XXX  --input_video_path XXX  --mode default
 ```
 We will visualize the results by creating a folder named 'demo_video_results', where vertical bar with the same color refer to the same shot.
 

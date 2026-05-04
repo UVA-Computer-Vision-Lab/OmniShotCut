@@ -78,11 +78,22 @@ inverse_intra_label_mapping = {
                                     "Doorway Effect" : 7,
                                 }
 
+intra_int2string = {
+                        0 : "General",
+                        1 : "Dissolve",
+                        2 : "Wipes",
+                        3 : "Push",
+                        4 : "Slide", 
+                        5 : "Zoom",
+                        6 : "Fade",
+                        7 : "Doorway",
+                        8 : "Padding",
+                    }
 
 
 
 
-#############################################  Inter Label  ############################################
+#############################################  Inter Label  #############################################
 
 unique_inter_label_mapping = {
 
@@ -103,3 +114,13 @@ inverse_inter_label_mapping = {
                                 "Transition" : 3,
                                 "Sudden_Jump" : 4,
                             }
+
+
+inter_int2string = {
+                        0 : "New_Start",
+                        1 : "Hard_Cut",
+                        2 : "Transition_Source",
+                        3 : "Transition",
+                        4 : "Sudden_Jump",
+                        5 : "Padding",
+                    }

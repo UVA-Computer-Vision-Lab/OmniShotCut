@@ -7,6 +7,7 @@ import numpy as np
 import math
 import subprocess
 import cv2
+import copy
 import ffmpeg
 import json
 import torch
@@ -25,7 +26,7 @@ from architecture.transformer import build_transformer
 from architecture.model import OmniShotCut
 from datasets.transforms import Video_Augmentation_Transform
 from util.visualization import visualize_concated_frames
-from config.label_correspondence import unique_intra_label_mapping, unique_inter_label_mapping
+from config.label_correspondence import unique_intra_label_mapping, unique_inter_label_mapping, intra_int2string, inter_int2string
 
 
 # Video Transform
@@ -43,8 +44,6 @@ def load_model(checkpoint_path: str):
     checkpoint_path = os.path.abspath(checkpoint_path)
     if not os.path.exists(checkpoint_path):
         raise FileNotFoundError(f"Checkpoint not found: {checkpoint_path}")
-    # if checkpoint_path in MODEL_CACHE:
-    #     return MODEL_CACHE[checkpoint_path]
 
 
     # Load state dict
@@ -70,7 +69,7 @@ def load_model(checkpoint_path: str):
     model.to("cuda")
     model.eval()
 
-    # MODEL_CACHE[checkpoint_path] = (model, model_args)
+
     return model, model_args
 
 
@@ -124,7 +123,6 @@ def split_videos(video, chunk_size, num_context_frames):
     
 
 
-
 def prune_non_context_ranges(pred_ranges, pred_intra_labels, pred_inter_labels, inference_window_size, num_context_frames):
 
     # Init
@@ -156,7 +154,6 @@ def prune_non_context_ranges(pred_ranges, pred_intra_labels, pred_inter_labels, 
 
 
 
-
 def merge_ranges(pred_ranges_full, pred_intra_labels_full, pred_inter_labels_full, pred_ranges, pred_intra_labels, pred_inter_labels):
 
     # Prepare
@@ -183,9 +180,6 @@ def merge_ranges(pred_ranges_full, pred_intra_labels_full, pred_inter_labels_ful
 
 
     return pred_ranges_full, pred_intra_labels_full, pred_inter_labels_full
-    
-
-
 
 
 
@@ -278,14 +272,32 @@ def single_video_inference(video_path, model, model_args, num_context_frames):
 
 def dump_list_of_dict(data, save_path, indent=4):
     """
-    Save list[dict] as JSON
+    Save list[dict] as JSON.
+    Convert pred_intra_labels / pred_inter_labels from int to string.
     """
+
+    def convert_item(item):
+        item = copy.deepcopy(item)
+
+        if "pred_intra_labels" in item:
+            item["pred_intra_labels"] = [
+                intra_int2string.get(x, f"Unknown_{x}")
+                for x in item["pred_intra_labels"]
+            ]
+
+        if "pred_inter_labels" in item:
+            item["pred_inter_labels"] = [
+                inter_int2string.get(x, f"Unknown_{x}")
+                for x in item["pred_inter_labels"]
+            ]
+
+        return item
 
     def format_dict(d, level):
         indent_str = " " * (indent * level)
         inner_indent = " " * (indent * (level + 1))
 
-        lines = ["{"]
+        lines = [indent_str + "{"]
         items = list(d.items())
 
         for i, (k, v) in enumerate(items):
@@ -296,6 +308,8 @@ def dump_list_of_dict(data, save_path, indent=4):
         lines.append(f"{indent_str}}}")
         return "\n".join(lines)
 
+    data = [convert_item(item) for item in data]
+
     with open(save_path, "w", encoding="utf-8") as f:
         f.write("[\n")
 
@@ -305,10 +319,6 @@ def dump_list_of_dict(data, save_path, indent=4):
             f.write(dict_str + comma + "\n")
 
         f.write("]\n")
-
-
-
-
 
 
 
@@ -324,7 +334,7 @@ def parse_args():
     parser.add_argument(
                             "--input_video_path",
                             type = str,
-                            default = "/scratch/usy5km/Cut_Anything/examples/genshin_video.mp4",
+                            default = "__assets__/demo_video1.mp4",
                             help = "Path to the input video path."
                         )
     parser.add_argument(
@@ -337,19 +347,20 @@ def parse_args():
                             "--num_context_frames",
                             type = int,
                             default = 0,
-                            help = "Path to save result json."
+                            help = "Number of historical context frames to overlap between each clip window. The default is 100, using 5-10 should be good."
                         )
     parser.add_argument(
                             "--visual_store_folder_path",
                             type = str,
                             default = "demo_video_results",
-                            help = "Path to save visualization results. Set to None to disable."
+                            help = "Path to save the visualization results. Set to None to disable."
                         )
     parser.add_argument(
                             "--mode",
                             type = str,
                             default = "default",
-                            help = "Output Mode. default means all Intra and Inter label. Clean_Shot means only Shot Cut without transition and sudden jump. "
+                            choices = ["default", "clean_shot"],
+                            help = "Output Mode. 'default' means all Intra and Inter label. 'clean_shot' means only General Shot Cut without transitions. "
                         )
 
     return parser.parse_args()
@@ -410,15 +421,6 @@ if __name__ == '__main__':
 
 
 
-    # Collect prediction resutls
-    pred_result = {}
-    pred_result["video_path"] = input_video_path
-    pred_result["pred_ranges"] = pred_ranges_full
-    pred_result["pred_intra_labels"] = pred_intra_labels_full
-    pred_result["pred_inter_labels"] = pred_inter_labels_full
-
-
-
     # Visualize
     if visual_store_folder_path is not None:
         print("Visualize the results!")
@@ -426,14 +428,32 @@ if __name__ == '__main__':
 
 
 
-    # Store the result as json
-    if mode == "default":
-        dump_list_of_dict([pred_result], result_store_path)
-    elif mode == "clean_shot":
-        # TODO: only leave the clean shots
-        breakpoint()
-        # dump_list_of_dict(pred_result, result_store_path, mode)
-    else:
-        raise NotImplementedError
+     # For Clean Shot mode, we only leave general types
+    if mode == "clean_shot":     
+        
+        # Clean shot mode (No Transitions in the middle)
+        general_type_idx = unique_intra_label_mapping["general"]
+        effective_indices = []
+        for idx, intra_label in enumerate(pred_intra_labels_full):
+            if intra_label == general_type_idx:
+                effective_indices.append(idx)
+        
+        # Reassign the shots
+        pred_ranges_full = np.array(pred_ranges_full)[effective_indices].tolist()
+        pred_intra_labels_full = np.array(pred_intra_labels_full)[effective_indices].tolist()
+        pred_inter_labels_full = np.array(pred_inter_labels_full)[effective_indices].tolist()
+
     
+
+    # Collect prediction results
+    pred_result = {}
+    pred_result["video_path"] = input_video_path
+    pred_result["pred_ranges"] = pred_ranges_full
+    pred_result["pred_intra_labels"] = pred_intra_labels_full
+    pred_result["pred_inter_labels"] = pred_inter_labels_full
+    
+    # Dump to json
+    dump_list_of_dict([pred_result], result_store_path)
+
+
     print("Finished!")
