@@ -24,7 +24,7 @@ class OmniShotCutModel:
         self._model = model
         self._model_args = model_args
 
-    def inference(self, video, mode="clean_shot", overlap=20):
+    def inference(self, video, mode="clean_shot", overlap=10):
         """Run shot cut detection on a video.
 
         Args:
@@ -76,6 +76,20 @@ class OmniShotCutModel:
         return ranges, intra_labels, inter_labels
 
 
+def _touch_download_counter(repo_id, filename="config.json"):
+    """Make an HF model load count toward the repo's download statistics.
+
+    The Hub counts downloads by requests to a repo's "query file" (config.json
+    by default, when no library filter is registered), not to the weight file.
+    Fetching only OmniShotCut_ckpt.pth therefore never increments the counter,
+    so we also fetch config.json here. Best-effort: any failure is ignored.
+    """
+    try:
+        hf_hub_download(repo_id=repo_id, filename=filename)
+    except Exception as e:
+        logger.debug(f"HF download-count file '{filename}' not fetched: {e}")
+
+
 def load(checkpoint_path, filename=_DEFAULT_HF_FILENAME):
     """Load model weights and return an OmniShotCutModel instance.
 
@@ -86,6 +100,7 @@ def load(checkpoint_path, filename=_DEFAULT_HF_FILENAME):
     if not os.path.exists(checkpoint_path):
         logger.info(f"Downloading checkpoint from HuggingFace: {checkpoint_path} ...")
         enable_progress_bars()
+        _touch_download_counter(checkpoint_path)   # count this load toward HF download stats
         checkpoint_path = hf_hub_download(repo_id=checkpoint_path, filename=filename)
 
     logger.info(f"Loading OmniShotCut from {checkpoint_path} ...")

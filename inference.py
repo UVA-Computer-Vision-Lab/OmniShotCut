@@ -16,7 +16,7 @@ from omnishotcut.engine import load_model, single_video_inference
 from omnishotcut.label_correspondence import unique_intra_label_mapping, intra_int2string, inter_int2string
 from omnishotcut.util.visualization import visualize_concated_frames
 
-_HF_REPO = "uva-cv-lab/OmniShotCut"
+_HF_REPO = "uva-cv-lab/OmniShotCut_v1.5"
 _HF_FILENAME = "OmniShotCut_ckpt.pth"
 
 
@@ -95,7 +95,7 @@ def parse_args():
     parser.add_argument(
                             "--overlap_window_length",
                             type = int,
-                            default = 20,
+                            default = 10,
                             help = "Number of overlapped frames between adjacent inference windows."
                         )
     parser.add_argument(
@@ -141,6 +141,8 @@ if __name__ == '__main__':
     if checkpoint_path is None:
         print(f"No checkpoint specified. Downloading from HuggingFace ({_HF_REPO})...")
         enable_progress_bars()
+        from omnishotcut import _touch_download_counter
+        _touch_download_counter(_HF_REPO)   # count this load toward HF download stats
         checkpoint_path = hf_hub_download(repo_id=_HF_REPO, filename=_HF_FILENAME)
     else:
         assert os.path.exists(checkpoint_path), f"Checkpoint not found: {checkpoint_path}"

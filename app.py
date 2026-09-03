@@ -33,7 +33,7 @@ INTER_ID2NAME = {v: k for k, v in unique_inter_label_mapping.items()}
 
 # Fixed demo config
 DEFAULT_CHECKPOINT_PATH = "checkpoints/OmniShotCut_ckpt.pth"
-DEFAULT_NUM_CONTEXT_FRAMES = 20
+DEFAULT_NUM_CONTEXT_FRAMES = 10
 DEFAULT_MAX_FRAMES_PER_IMG = 132            # For the visualization
 VIS_DIR = "demo_video_results"
 
@@ -43,7 +43,7 @@ MAX_GALLERY_PAGES = 20
 
 # Prepare the checkpoint — download from HF Hub into local cache if not present
 checkpoint_path = hf_hub_download(
-    repo_id="uva-cv-lab/OmniShotCut",
+    repo_id="uva-cv-lab/OmniShotCut_v1.5",
     filename="OmniShotCut_ckpt.pth",
 )
 model, model_args = load_model(checkpoint_path)

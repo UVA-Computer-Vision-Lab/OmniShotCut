@@ -13,15 +13,16 @@ OmniShotCut can detect shot changes of the video in diverse sources (anime, vlog
 [![Paper](https://img.shields.io/badge/arXiv-Paper-b31b1b?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2604.24762)
 [![Website](https://img.shields.io/badge/Project-Website-pink?logo=googlechrome&logoColor=white)](https://uva-computer-vision-lab.github.io/OmniShotCut_website/)
 <a href="https://huggingface.co/spaces/uva-cv-lab/OmniShotCut"><img src="https://img.shields.io/static/v1?label=%F0%9F%A4%97%20HF%20Space&message=Online+Demo&color=orange"></a>
-<a href="https://huggingface.co/uva-cv-lab/OmniShotCut"><img src="https://img.shields.io/static/v1?label=%F0%9F%A4%97%20HuggingFace&message=Model+Weight&color=orange"></a>
+<a href="https://huggingface.co/uva-cv-lab/OmniShotCut_v1.5"><img src="https://img.shields.io/static/v1?label=%F0%9F%A4%97%20HuggingFace&message=Model+Weight&color=orange"></a>
 
 
-🔥 [Update](#Update) **|** 👀 [**Visualization**](#Visualization) **|** 🔧 [Installation](#Installation) **|** 🐍 [Quick Start](#quick_start) **|** ⚡ [Inference](#fast_inference) **|** 💻 [OmniShotCut Benchmark](#evaluation)
+🔥 [Update](#Update) **|** 👀 [**Visualization**](#Visualization) **|** 🔧 [Installation](#Installation) **|** 🐍 [Quick Start](#quick_start) **|** 🤗 [Model Zoo](#model_zoo) **|** ⚡ [Inference](#fast_inference) **|** 💻 [OmniShotCut Benchmark](#evaluation)
 
 
 
 
 ## <a name="Update"></a>Update 🔥🔥🔥
+- [x] **Released the v1.5 weight** — a larger model (hidden dim 576, ~52.8M params) with fewer false cuts on continuous camera motion / lighting changes and better dense fast-cut recall. See [Model Zoo](#model_zoo).
 - [x] Release ArXiv paper
 - [x] Release the inference weights
 - [x] Release Gradio demo (with online)
@@ -61,7 +62,7 @@ Once installed, running shot boundary detection is just a few lines:
 import omnishotcut
 
 # Load model — accepts a local checkpoint path or HuggingFace repo
-cut_model = omnishotcut.load("uva-cv-lab/OmniShotCut", filename = "OmniShotCut_ckpt.pth")
+cut_model = omnishotcut.load("uva-cv-lab/OmniShotCut_v1.5", filename = "OmniShotCut_ckpt.pth")
 
 # Run on a video file
 ranges = cut_model.inference("video.mp4", mode="clean_shot")
@@ -109,25 +110,42 @@ Click "Running on **public** URL".
 
 ## <a name="inference"></a> Inference ⚡
 
-This section presents more formal fun and controllable setting in running.
+This section presents a more formal and controllable way to run inference.
 
 First, let us download the checkpoint
 ```shell
 mkdir checkpoints
 cd checkpoints
-wget https://huggingface.co/uva-cv-lab/OmniShotCut/resolve/main/OmniShotCut_ckpt.pth
+wget https://huggingface.co/uva-cv-lab/OmniShotCut_v1.5/resolve/main/OmniShotCut_ckpt.pth
 ```
 
-We provide some modes for the inference. 'default' mode will shot the intra and inter label we define.
+We provide several inference modes. The 'default' mode outputs the intra and inter labels we define.
 However, we believe that most users might want the most direct results, which is the general shots without any transitions. 
 To this end, please use '--mode clean_shot'.
 
 Execute the inference by:
 ```shell
-python inference.py  --checkpoint_path checkpoints/OmniShotCut_ckpt.pth  --input_video_path __assets__/demo_video1.mp4  --overlap_window_length 20  --mode default
+python inference.py  --checkpoint_path checkpoints/OmniShotCut_ckpt.pth  --input_video_path __assets__/demo_video1.mp4  --overlap_window_length 10  --mode default
 ```
 
 Results are saved to `results.json`. Visualization is saved to `demo_video_results/`, where vertical bars with the same color indicate the same shot.
+
+
+
+
+## <a name="model_zoo"></a> Model Zoo 🤗
+
+| Model | Description | Huggingface |
+|-------|-------------|-------------|
+| OmniShotCut v1.5 (recommended) | Hidden dim 576, 52.8M params. Best real-world quality: fewer false cuts on continuous camera motion / lighting changes and better dense fast-cut recall. | [Download](https://huggingface.co/uva-cv-lab/OmniShotCut_v1.5) |
+| OmniShotCut (paper) | 3 encoders, 34.5M params. Reproduces the paper (Table 1) results. | [Download](https://huggingface.co/uva-cv-lab/OmniShotCut_paper) |
+| OmniShotCut (preview) | 6 encoders, 41M params. Early preview release. | [Download](https://huggingface.co/uva-cv-lab/OmniShotCut) |
+
+**v1.5** is a drop-in replacement (same filename and interface): it fires far fewer false cuts on continuous camera motion and lighting/strobe changes, recovers more dense fast cuts, and keeps the same accuracy on clean content.
+
+
+
+
 
 
 
@@ -141,7 +159,5 @@ Results are saved to `results.json`. Visualization is saved to `demo_video_resul
   year={2026}
 }
 ```
-
-
 
 
