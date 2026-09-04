@@ -16,17 +16,17 @@ OmniShotCut can detect shot changes of the video in diverse sources (anime, vlog
 <a href="https://huggingface.co/uva-cv-lab/OmniShotCut_v1.5"><img src="https://img.shields.io/static/v1?label=%F0%9F%A4%97%20HuggingFace&message=Model+Weight&color=orange"></a>
 
 
-🔥 [Update](#Update) **|** 👀 [**Visualization**](#Visualization) **|** 🔧 [Installation](#Installation) **|** 🐍 [Quick Start](#quick_start) **|** 🤗 [Model Zoo](#model_zoo) **|** ⚡ [Inference](#fast_inference) **|** 💻 [OmniShotCut Benchmark](#evaluation)
+🔥 [Update](#Update) **|** 🐍 [Quick Start](#quick_start)  **|** 🔧 [Installation](#Installation) **|** ⚡ [Inference](#fast_inference) **|** 🤗 [Model Zoo](#model_zoo)
 
 
 
 
 ## <a name="Update"></a>Update 🔥🔥🔥
-- [x] **Released the v1.5 weight** — a larger model (hidden dim 576, ~52.8M params) with fewer false cuts on continuous camera motion / lighting changes and better dense fast-cut recall. See [Model Zoo](#model_zoo).
 - [x] Release ArXiv paper
 - [x] Release the inference weights
 - [x] Release Gradio demo (with online)
 - [x] Release 'pip install omnishotcut' version
+- [x] **Released the v1.5 weight** — a larger model with fewer false cuts on continuous camera motion / lighting changes and better dense fast-cut recall. 
 - [ ] Release the benchmark
 - [ ] Release the training code and curation
       
