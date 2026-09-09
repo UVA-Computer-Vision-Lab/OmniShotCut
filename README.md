@@ -150,6 +150,16 @@ Results are saved to `results.json`. Visualization is saved to `demo_video_resul
 
 
 
+## Awesome work using OmniShotCut
+
+- [DreamX-Creator](https://arxiv.org/abs/2608.31106): Applies OmniShotCut for fine-grained shot-boundary detection and transition labeling during finetuning-data curation, discarding candidate segments that contain or span a detected transition.
+- [Sekai2](https://arxiv.org/abs/2608.09449): Uses OmniShotCut to detect hard cuts and gradual transitions, then partitions continuous perspective shots into clean clips (up to 120s) for world-model pretraining data.
+- [ContextMaster](https://arxiv.org/abs/2608.04956): Invokes OmniShotCut to segment multi-shot videos and localize individual shots, both for its Interactive Director tool and for preparing addition/removal/replacement training data.
+- [AlayaWorld](https://arxiv.org/abs/2607.18367): Combines classical cut/dissolve detection with OmniShotCut in its data-curation pipeline's shot-boundary filtering stage, ensuring every retained training sample is a single continuous shot.
+
+
+
+
 ## 📚 Citation
 ```bibtex
 @article{wang2026omnishotcut,
